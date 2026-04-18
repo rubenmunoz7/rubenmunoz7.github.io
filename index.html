@@ -235,6 +235,7 @@
       const card = document.createElement('div');
       card.className = 'project-card';
 
+      //Lazy loading images
       const thumb = p.images.length
         ? `<img class="project-thumb" src="${p.images[0]}" alt="${p.title}" loading="lazy">`
         : `<div class="project-thumb-placeholder">${p.emoji}</div>`;
@@ -298,7 +299,7 @@
         modalCounter.textContent = '';
         return;
       }
-
+//Lazy loading images in modal
       imgs.forEach((src, i) => {
         const img = document.createElement('img');
         img.className = 'modal-slide' + (i === 0 ? ' active' : '');
