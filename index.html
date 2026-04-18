@@ -5,21 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ruben Munoz — Portfolio</title>
 
-  <!-- ✅ SECURITY: Content Security Policy (XSS mitigation) -->
+  <!--(Protect Against SQL Injection (SQLi) & XSS Attacks-->
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com;
              script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
              style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
              img-src 'self' data: https://www.google-analytics.com;">
-
-  <!-- ✅ MONITORING: Google Analytics — replace G-XXXXXXXXXX with your Measurement ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-  </script>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -37,11 +28,10 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <section id="hero">
     <div class="container">
       <div class="hero-inner">
-        <!-- ✅ PERFORMANCE: lazy loading applied to all below-fold images -->
+        <!-- Lazy loading images (so images load only when needed) -->
         <img src="profile.jpg" alt="Ruben Munoz" class="hero-photo">
         <div>
           <h1 class="hero-name">Ruben Munoz</h1>
@@ -62,7 +52,7 @@
 
   <hr class="section-divider">
 
-  <!-- SKILLS -->
+  <!-- Skills -->
   <section id="skills" class="section">
     <div class="container">
       <p class="section-label">Technical Skills</p>
@@ -121,7 +111,7 @@
 
   <hr class="section-divider">
 
-  <!-- CERTIFICATIONS -->
+  <!-- Certs -->
   <section id="certifications" class="section">
     <div class="container">
       <p class="section-label">CompTIA</p>
@@ -175,7 +165,7 @@
 
   <hr class="section-divider">
 
-  <!-- PROJECTS -->
+  <!-- 2 Projects -->
   <section id="projects" class="section">
     <div class="container">
       <p class="section-label">Labs &amp; Projects</p>
@@ -184,7 +174,7 @@
     </div>
   </section>
 
-  <!-- MODAL -->
+  <!-- Modal for image slideshow -->
   <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
     <div class="modal" id="modal">
       <button class="modal-close" id="modalClose" aria-label="Close">&#x2715;</button>
@@ -220,6 +210,7 @@
     </div>
   </footer>
 
+  <!-- Images lazy loading for each project -->
   <script>
     const projects = [
       {
@@ -227,19 +218,18 @@
         description: 'Built a home Security Operations Center using a Raspberry Pi running Suricata IDS with port mirroring. Forwarded logs into Splunk SIEM and built custom dashboards to detect network scans, brute-force attempts, and suspicious lateral movement. This gave me hands-on experience with alert triage, log correlation, and detection engineering.',
         tags: ['Suricata IDS', 'Splunk SIEM', 'Raspberry Pi', 'Log Analysis', 'Detection Engineering'],
         emoji: '🖥️',
-        images: []
-        // Add screenshot paths here, e.g.: images: ['images/soc-dashboard.jpg']
+        images: ['soc1.jpg']
       },
       {
         title: 'DShield Honeypot',
         description: 'Deployed a DShield honeypot on a Raspberry Pi connected to the Internet Storm Center (ISC). Exposed it to the public internet and captured real attacker behavior including SSH brute-force campaigns and port scanning. Reviewed logs daily, mapped behavior to MITRE ATT&CK techniques, and submitted threat data to the ISC community.',
         tags: ['DShield', 'Honeypot', 'Raspberry Pi', 'SSH Analysis', 'MITRE ATT&CK', 'ISC Platform'],
         emoji: '🍯',
-        images: []
+        images: ['dshield.jpg']
       }
     ];
 
-    // Render cards
+    // Build and display a card on the page for each project in the array above
     const grid = document.getElementById('projectsGrid');
     projects.forEach((p, i) => {
       const card = document.createElement('div');
@@ -267,7 +257,7 @@
       grid.appendChild(card);
     });
 
-    // Modal logic
+    //Logic for modal
     let activeProject = null;
     let imgIdx = 0;
 
