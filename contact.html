@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Ruben Munoz</title>
+
+  <!-- ✅ SECURITY: Content Security Policy (XSS mitigation) -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com;
+             script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://cdnjs.cloudflare.com;
+             style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+             frame-src https://www.google.com/recaptcha/;
+             img-src 'self' data: https://www.google-analytics.com;">
+
+  <!--
+    ✅ SECURITY: DOMPurify — strips injected HTML/JS from form inputs before submission.
+    Example: a name field containing <script>alert(1)</script> becomes an empty string.
+    Docs: https://github.com/cure53/DOMPurify
+  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"
+          integrity="sha512-FtZaBmxMo7lmGDCCmu/8aMRQmjLyxn1tpMxzO5I8JFGSXQSC/WCCbE0xOuU3aqcb0AKQ+p+FXnW5FJk3C7OA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!--
+    ✅ SECURITY: Google reCAPTCHA v2 — blocks automated bot submissions.
+    This portfolio has no login page; reCAPTCHA is applied here to the contact
+    form, which faces the same threat (automated spam bots) as a login form.
+    Setup: https://www.google.com/recaptcha/admin/create
+      1. Choose reCAPTCHA v2 "I'm not a robot" checkbox
+      2. Add your domain (e.g. rubenmunoz7.github.io)
+      3. Replace YOUR_SITE_KEY below with the site key you receive
+  -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <!-- ✅ MONITORING: Google Analytics — replace G-XXXXXXXXXX with your Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .contact-page { padding: 4rem 0 5rem; }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* Left: direct links */
+    .contact-links-card {
+      background: #fff;
+      border: 1px solid #dde1ea;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .contact-links-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      color: #1a1a2e;
+    }
+
+    .contact-link-row {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid #f0f4f8;
+      color: #333;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .contact-link-row:last-of-type { border-bottom: none; }
+    .contact-link-row:hover { color: #0077cc; text-decoration: none; }
+
+    .contact-icon {
+      width: 36px;
+      height: 36px;
+      background: #f0f4f8;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #555;
+    }
+
+    .link-label { font-size: 0.72rem; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.06em; }
+    .link-value { font-size: 0.875rem; }
+
+    .security-note {
+      margin-top: 1.25rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      font-size: 0.8rem;
+      color: #166534;
+      line-height: 1.55;
+    }
+
+    /* Right: form */
+    .contact-form-card {
+      background: #fff;
+      border: 1px solid #dde1ea;
+      border-radius: 8px;
+      padding: 2rem;
+    }
+
+    .form-title    { font-size: 1.2rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0.25rem; }
+    .form-subtitle { font-size: 0.875rem; color: #888; margin-bottom: 1.5rem; }
+
+    .form-group { margin-bottom: 1rem; }
+
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 0.35rem;
+    }
+    .form-label .req { color: #e53e3e; margin-left: 2px; }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border: 1px solid #dde1ea;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: #1a1a2e;
+      background: #fff;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: #0077cc; }
+    .form-input.error, .form-textarea.error { border-color: #e53e3e; }
+    .form-textarea { resize: vertical; min-height: 110px; }
+
+    .field-error { display: none; font-size: 0.75rem; color: #e53e3e; margin-top: 0.25rem; }
+
+    .recaptcha-wrap { margin: 1rem 0 1.25rem; }
+    .recaptcha-note { font-size: 0.75rem; color: #aaa; margin-top: 0.4rem; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.7rem;
+      background: #0077cc;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-submit:hover:not(:disabled) { background: #005fa3; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .form-status {
+      display: none;
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+      font-size: 0.875rem;
+      margin-top: 0.85rem;
+    }
+    .form-status.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+    .form-status.fail    { background: #fff5f5; border: 1px solid #fed7d7; color: #9b2c2c; }
+
+    @media (max-width: 680px) { .contact-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Ruben Munoz</a>
+      <ul class="nav-links">
+        <li><a href="index.html#skills">Skills</a></li>
+        <li><a href="index.html#certifications">Certifications</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="contact-page">
+    <div class="container">
+      <p class="section-label">Get In Touch</p>
+      <h2 class="section-title">Contact</h2>
+
+      <div class="contact-layout">
+
+        <!-- Left column -->
+        <div>
+          <div class="contact-links-card">
+            <p class="contact-links-title">Direct Links</p>
+
+            <a href="mailto:rmunoz6@student.gsu.edu" class="contact-link-row">
+              <div class="contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect width="20" height="16" x="2" y="4" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </div>
+              <div>
+                <div class="link-label">Email</div>
+                <div class="link-value">rmunoz6@student.gsu.edu</div>
+              </div>
+            </a>
+
+            <a href="https://linkedin.com/in/rubenmunoz7" target="_blank" rel="noopener" class="contact-link-row">
+              <div class="contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4V9h4v1.5"/>
+                  <rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>
+                </svg>
+              </div>
+              <div>
+                <div class="link-label">LinkedIn</div>
+                <div class="link-value">linkedin.com/in/rubenmunoz7</div>
+              </div>
+            </a>
+
+            <a href="https://github.com/rubenmunoz7" target="_blank" rel="noopener" class="contact-link-row">
+              <div class="contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+                  <path d="M9 18c-4.51 2-5-2-7-2"/>
+                </svg>
+              </div>
+              <div>
+                <div class="link-label">GitHub</div>
+                <div class="link-value">github.com/rubenmunoz7</div>
+              </div>
+            </a>
+
+            <div class="contact-link-row" style="cursor:default">
+              <div class="contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <div class="link-label">Location</div>
+                <div class="link-value">Atlanta, GA · Open to remote</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="security-note">
+            <strong>Security:</strong> This form uses Google reCAPTCHA v2 to prevent automated submissions,
+            DOMPurify to sanitize inputs against XSS, and HTTPS (via GitHub Pages) to encrypt data in transit.
+          </div>
+        </div>
+
+        <!-- Right column: form -->
+        <div class="contact-form-card">
+          <p class="form-title">Send a Message</p>
+          <p class="form-subtitle">I typically respond within 24 hours.</p>
+
+          <!--
+            SETUP (one-time):
+            1. formspree.io → Sign up free → New Form → copy your form ID
+               Replace YOUR_FORMSPREE_ID in the JS below
+            2. google.com/recaptcha/admin → reCAPTCHA v2 → add your domain
+               Replace YOUR_SITE_KEY in the g-recaptcha div below
+          -->
+
+          <div id="contactForm">
+            <div class="form-group">
+              <label class="form-label" for="fname">Name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="fname" name="name"
+                     placeholder="Jane Smith" autocomplete="name" maxlength="100">
+              <div class="field-error" id="nameError">Please enter your name.</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="femail">Email <span class="req">*</span></label>
+              <input class="form-input" type="email" id="femail" name="email"
+                     placeholder="jane@example.com" autocomplete="email" maxlength="200">
+              <div class="field-error" id="emailError">Please enter a valid email.</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fsubject">Subject</label>
+              <input class="form-input" type="text" id="fsubject" name="subject"
+                     placeholder="Job opportunity, question, etc." maxlength="150">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fmessage">Message <span class="req">*</span></label>
+              <textarea class="form-textarea" id="fmessage" name="message"
+                        placeholder="Your message…" maxlength="2000"></textarea>
+              <div class="field-error" id="messageError">Please enter a message.</div>
+            </div>
+
+            <!-- ✅ SECURITY: reCAPTCHA v2 widget — replace YOUR_SITE_KEY -->
+            <div class="recaptcha-wrap">
+              <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+              <p class="recaptcha-note">Complete the checkbox above to verify you are human.</p>
+            </div>
+
+            <button class="btn-submit" id="submitBtn" type="button" onclick="submitForm()">
+              Send Message
+            </button>
+
+            <div class="form-status success" id="statusSuccess">
+              Message sent! I'll get back to you within 24 hours.
+            </div>
+
+            <div class="form-status fail" id="statusFail">
+              <span id="failMsg">Something went wrong. Please try again or email me directly.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-name">Ruben Munoz — Cybersecurity Portfolio</span>
+        <div class="footer-links">
+          <a href="https://github.com/rubenmunoz7" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/rubenmunoz7" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="index.html">Home</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Replace with your Formspree form ID after signing up at formspree.io
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORMSPREE_ID';
+
+    async function submitForm() {
+      clearErrors();
+
+      const rawName    = document.getElementById('fname').value.trim();
+      const rawEmail   = document.getElementById('femail').value.trim();
+      const rawSubject = document.getElementById('fsubject').value.trim();
+      const rawMessage = document.getElementById('fmessage').value.trim();
+
+      // ✅ SECURITY: DOMPurify sanitization — strips any HTML/script tags from inputs.
+      // ALLOWED_TAGS: [] means no HTML is permitted; plain text only.
+      const name    = DOMPurify.sanitize(rawName,    { ALLOWED_TAGS: [] });
+      const email   = DOMPurify.sanitize(rawEmail,   { ALLOWED_TAGS: [] });
+      const subject = DOMPurify.sanitize(rawSubject, { ALLOWED_TAGS: [] });
+      const message = DOMPurify.sanitize(rawMessage, { ALLOWED_TAGS: [] });
+
+      let valid = true;
+      if (!name)    { showError('fname',    'nameError');    valid = false; }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                      showError('femail',   'emailError');   valid = false; }
+      if (!message) { showError('fmessage', 'messageError'); valid = false; }
+      if (!valid) return;
+
+      // ✅ SECURITY: reCAPTCHA check — empty string means bot or skipped checkbox.
+      const recaptchaToken = typeof grecaptcha !== 'undefined'
+        ? grecaptcha.getResponse() : '';
+
+      if (!recaptchaToken) {
+        document.getElementById('failMsg').textContent =
+          'Please complete the reCAPTCHA checkbox before submitting.';
+        document.getElementById('statusFail').style.display = 'block';
+        return;
+      }
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ name, email, subject, message,
+            'g-recaptcha-response': recaptchaToken })
+        });
+
+        if (res.ok) {
+          document.getElementById('statusSuccess').style.display = 'block';
+          ['fname','femail','fsubject','fmessage'].forEach(id =>
+            document.getElementById(id).value = '');
+          if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+          btn.style.display = 'none';
+          // ✅ MONITORING: track form submission in Google Analytics
+          if (typeof gtag !== 'undefined')
+            gtag('event', 'contact_submit', { event_category: 'engagement' });
+        } else {
+          const data = await res.json().catch(() => ({}));
+          document.getElementById('failMsg').textContent =
+            data.error || 'Submission failed. Please email me directly.';
+          document.getElementById('statusFail').style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Send Message';
+          if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+        }
+      } catch {
+        document.getElementById('failMsg').textContent =
+          'Network error. Check your connection and try again.';
+        document.getElementById('statusFail').style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+      }
+    }
+
+    function showError(inputId, errorId) {
+      document.getElementById(inputId).classList.add('error');
+      document.getElementById(errorId).style.display = 'block';
+    }
+
+    function clearErrors() {
+      ['fname','femail','fmessage'].forEach(id =>
+        document.getElementById(id).classList.remove('error'));
+      ['nameError','emailError','messageError'].forEach(id =>
+        document.getElementById(id).style.display = 'none');
+      document.getElementById('statusSuccess').style.display = 'none';
+      document.getElementById('statusFail').style.display   = 'none';
+    }
+  </script>
+
+</body>
+</html>
