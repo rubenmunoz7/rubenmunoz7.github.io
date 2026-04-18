@@ -588,4 +588,3 @@ footer { padding: 2rem 0; }
 .form-status.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
 .form-status.fail    { background: #fff5f5; border: 1px solid #fed7d7; color: #9b2c2c; }
 
-@media (max-width: 500px) { .contact-layout { grid-template-columns: 1fr; } }
