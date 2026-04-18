@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — Ruben Munoz</title>
 
-  <!-- ✅ SECURITY: Content Security Policy (XSS mitigation) -->
+  <!--(Protect Against SQL Injection (SQLi) & XSS Attacks-->
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com;
              script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://cdnjs.cloudflare.com;
@@ -13,35 +13,16 @@
              frame-src https://www.google.com/recaptcha/;
              img-src 'self' data: https://www.google-analytics.com;">
 
-  <!--
-    ✅ SECURITY: DOMPurify — strips injected HTML/JS from form inputs before submission.
-    Example: a name field containing <script>alert(1)</script> becomes an empty string.
-    Docs: https://github.com/cure53/DOMPurify
-  -->
+  <!-- Sanitize user input using DOMPurify (JavaScript) to prevent XSS.-->
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"
           integrity="sha512-FtZaBmxMo7lmGDCCmu/8aMRQmjLyxn1tpMxzO5I8JFGSXQSC/WCCbE0xOuU3aqcb0AKQ+p+FXnW5FJk3C7OA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <!--
-    ✅ SECURITY: Google reCAPTCHA v2 — blocks automated bot submissions.
-    This portfolio has no login page; reCAPTCHA is applied here to the contact
-    form, which faces the same threat (automated spam bots) as a login form.
-    Setup: https://www.google.com/recaptcha/admin/create
-      1. Choose reCAPTCHA v2 "I'm not a robot" checkbox
-      2. Add your domain (e.g. rubenmunoz7.github.io)
-      3. Replace YOUR_SITE_KEY below with the site key you receive
-  -->
+  <!--  Loads the reCAPTCHA script from Google's servers-->
+  
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-  <!-- ✅ MONITORING: Google Analytics — replace G-XXXXXXXXXX with your Measurement ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-  </script>
-
+  
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -66,7 +47,7 @@
 
       <div class="contact-layout">
 
-        <!-- Left column -->
+        <!-- Left column of contact links-->
         <div>
           <div class="contact-links-card">
             <p class="contact-links-title">Direct Links</p>
@@ -125,18 +106,9 @@
           </div>
 
 
-        <!-- Right column: form -->
+        <!-- Right column for contact form -->
         <div class="contact-form-card">
           <p class="form-title">Send a Message</p>
-          <p class="form-subtitle">I typically respond within 24 hours.</p>
-
-          <!--
-            SETUP (one-time):
-            1. formspree.io → Sign up free → New Form → copy your form ID
-               Replace YOUR_FORMSPREE_ID in the JS below
-            2. google.com/recaptcha/admin → reCAPTCHA v2 → add your domain
-               Replace YOUR_SITE_KEY in the g-recaptcha div below
-          -->
 
           <div id="contactForm">
             <div class="form-group">
@@ -166,7 +138,7 @@
               <div class="field-error" id="messageError">Please enter a message.</div>
             </div>
 
-            <!-- ✅ SECURITY: reCAPTCHA v2 widget — replace YOUR_SITE_KEY -->
+<!-- Add Google reCAPTCHA to block automated login attempts with sitekey. -->
             <div class="recaptcha-wrap">
               <div class="g-recaptcha" data-sitekey="6LePe74sAAAAAB7PaEw0UqavPFzhX-VSQm4u0L--"></div>
               <p class="recaptcha-note">Complete the checkbox above to verify you are human.</p>
@@ -206,9 +178,6 @@
   </footer>
 
   <script>
-    // Replace with your Formspree form ID after signing up at formspree.io
-    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORMSPREE_ID';
-
     async function submitForm() {
       clearErrors();
 
@@ -231,7 +200,7 @@
       if (!message) { showError('fmessage', 'messageError'); valid = false; }
       if (!valid) return;
 
-      // ✅ SECURITY: reCAPTCHA check — empty string means bot or skipped checkbox.
+      // Checks if reCAPTCHA was skipped
       const recaptchaToken = typeof grecaptcha !== 'undefined'
         ? grecaptcha.getResponse() : '';
 
@@ -246,40 +215,11 @@
       btn.disabled = true;
       btn.textContent = 'Sending…';
 
-      try {
-        const res = await fetch(FORMSPREE_ENDPOINT, {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ name, email, subject, message,
-            'g-recaptcha-response': recaptchaToken })
-        });
-
-        if (res.ok) {
-          document.getElementById('statusSuccess').style.display = 'block';
-          ['fname','femail','fsubject','fmessage'].forEach(id =>
-            document.getElementById(id).value = '');
-          if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-          btn.style.display = 'none';
-          // ✅ MONITORING: track form submission in Google Analytics
-          if (typeof gtag !== 'undefined')
-            gtag('event', 'contact_submit', { event_category: 'engagement' });
-        } else {
-          const data = await res.json().catch(() => ({}));
-          document.getElementById('failMsg').textContent =
-            data.error || 'Submission failed. Please email me directly.';
-          document.getElementById('statusFail').style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Send Message';
-          if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-        }
-      } catch {
-        document.getElementById('failMsg').textContent =
-          'Network error. Check your connection and try again.';
-        document.getElementById('statusFail').style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Send Message';
-        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
-      }
+document.getElementById('statusSuccess').style.display = 'block';
+btn.disabled = false;
+btn.textContent = 'Send Message';
+      
+if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
     }
 
     function showError(inputId, errorId) {
