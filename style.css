@@ -55,14 +55,14 @@ nav {
 .nav-links a { color: #444; font-size: 0.9rem; }
 .nav-links a:hover { color: #0077cc; text-decoration: none; }
 
-/* ── CONTAINER ── */
+/* container */
 .container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 2rem;
 }
 
-/* ── SECTIONS ── */
+/* sections */
 .section { padding: 3.5rem 0; }
 
 .section-label {
@@ -86,7 +86,6 @@ hr.section-divider {
   border-top: 1px solid #dde1ea;
 }
 
-/* ── HERO ── */
 #hero { padding: 4rem 0 3.5rem; }
 
 .hero-inner {
@@ -144,7 +143,7 @@ hr.section-divider {
 .btn-secondary { background: #fff; color: #444; border-color: #dde1ea; }
 .btn-secondary:hover { background: #f0f4f8; text-decoration: none; color: #444; }
 
-/* ── SKILLS ── */
+/* skils*/
 .skills-groups { display: flex; flex-direction: column; gap: 1.5rem; }
 
 .skills-group-label {
@@ -168,7 +167,7 @@ hr.section-divider {
   color: #333;
 }
 
-/* ── CERTS ── */
+/* certs*/
 .certs-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -220,7 +219,7 @@ hr.section-divider {
 .cert-status.earned  .status-dot { background: #059669; }
 .cert-status.pending .status-dot { background: #d97706; }
 
-/* ── PROJECTS ── */
+/* projects  */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -289,7 +288,7 @@ hr.section-divider {
 
 .project-hint { font-size: 0.75rem; color: #aaa; }
 
-/* ── MODAL ── */
+/* images */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -452,7 +451,6 @@ footer { padding: 2rem 0; }
 .footer-links a { font-size: 0.85rem; color: #888; }
 .footer-links a:hover { color: #0077cc; }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 640px) {
   .hero-inner { flex-direction: column; gap: 1.5rem; }
   .hero-photo { width: 120px; height: 120px; }
@@ -460,7 +458,7 @@ footer { padding: 2rem 0; }
   .nav-links  { display: none; }
 }
 
-/* ── CONTACT PAGE ── */
+/* contact page */
 .contact-page { padding: 4rem 0 5rem; }
 
 .contact-layout {
