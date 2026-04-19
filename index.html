@@ -40,7 +40,7 @@
   <section id="hero">
     <div class="container">
       <div class="hero-inner">
-        <!-- Lazy loading images (so images load only when needed) -->
+        <!--  loading images (so images load only when needed) -->
         <img src="profile.jpg" alt="Ruben Munoz" class="hero-photo">
         <div>
           <h1 class="hero-name">Ruben Munoz</h1>
@@ -219,7 +219,7 @@
     </div>
   </footer>
 
-  <!-- Images lazy loading for each project -->
+  <!-- Images  loading for each project -->
   <script>
     const projects = [
       {
@@ -244,9 +244,9 @@
       const card = document.createElement('div');
       card.className = 'project-card';
 
-      //Lazy loading images
+      // loading images
       const thumb = p.images.length
-        ? `<img class="project-thumb" src="${p.images[0]}" alt="${p.title}" loading="lazy">`
+        ? `<img class="project-thumb" src="${p.images[0]}" alt="${p.title}">`
         : `<div class="project-thumb-placeholder">${p.emoji}</div>`;
 
       const visibleTags = p.tags.slice(0, 4);
@@ -308,13 +308,12 @@
         modalCounter.textContent = '';
         return;
       }
-//Lazy loading images in modal
+// loading images in modal
       imgs.forEach((src, i) => {
         const img = document.createElement('img');
         img.className = 'modal-slide' + (i === 0 ? ' active' : '');
         img.src = src;
         img.alt = `${activeProject.title} screenshot ${i + 1}`;
-        img.loading = 'lazy';
         modalStage.appendChild(img);
 
         const dot = document.createElement('button');
