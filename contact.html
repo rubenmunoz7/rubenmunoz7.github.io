@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — Ruben Munoz</title>
+  <link rel="stylesheet" href="style.css">
 
   <!--(Protect Against SQL Injection (SQLi) & XSS Attacks-->
   <meta http-equiv="Content-Security-Policy"
@@ -18,13 +19,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"
           integrity="sha512-FtZaBmxMo7lmGDCCmu/8aMRQmjLyxn1tpMxzO5I8JFGSXQSC/WCCbE0xOuU3aqcb0AKQ+p+FXnW5FJk3C7OA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+  
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6FJR5JP79Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-6FJR5JP79Z');
+</script>
+  
   <!--  Loads the reCAPTCHA script from Google's servers-->
   
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   
-  <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
 
