@@ -195,8 +195,7 @@
       const rawSubject = document.getElementById('fsubject').value.trim();
       const rawMessage = document.getElementById('fmessage').value.trim();
 
-      // ✅ SECURITY: DOMPurify sanitization — strips any HTML/script tags from inputs.
-      // ALLOWED_TAGS: [] means no HTML is permitted; plain text only.
+      //DOMPurify strips any HTML/script tags from inputs.
       const name    = DOMPurify.sanitize(rawName,    { ALLOWED_TAGS: [] });
       const email   = DOMPurify.sanitize(rawEmail,   { ALLOWED_TAGS: [] });
       const subject = DOMPurify.sanitize(rawSubject, { ALLOWED_TAGS: [] });
